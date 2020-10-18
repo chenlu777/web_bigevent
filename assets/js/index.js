@@ -36,7 +36,6 @@ function gitUserInfo() {
             Authorization: localStorage.getItem('token') || ''
         }, */
         success: function (res) {//success是数据返回后处理页面逻辑 比如渲染页面之类的
-            console.log(res);
             if (res.status !== 0) {
                 return layui.layer.msg('获取用户信息失败')
             }

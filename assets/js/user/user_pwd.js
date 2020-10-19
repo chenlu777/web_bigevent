@@ -1,8 +1,27 @@
 $(function () {
     //为提交按钮添加点击事件
-    $('#btnSubmit').on('click', function () {
+    $('.layui-form').on('submit', function (e) {
+        e.preventDefault();
         changPwd();
-    })
+    });
+
+    layui.form.verify({
+        pwd: [
+            /^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'
+        ],
+        //新增一个校验规则
+        samePwd: function (value) {
+            if (value === $('[name=oldPwd]').val()) {
+                return '新旧密码不能相同!'
+            }
+        },
+        //校验确认密码
+        rePwd: function (value) {
+            if (value !== $('[name=newPwd]').val()) {
+                return '两次密码不一致'
+            }
+        }
+    });
 })
 
 //修改用户的密码-------------------------------
@@ -15,9 +34,10 @@ function changPwd() {
         url: '/my/updatepwd',
         data: strData,
         success: function (res) {
+            console.log(res);
             //如果修改不成功 提示消息
             if (res.status !== 0) {
-                layui.layer.msg(res.message)
+                layui.layer.msg('更新密码失败!')
             } else {
                 //如果修改成功 则需要重新登录输入密码
                 //提示消息
@@ -25,7 +45,7 @@ function changPwd() {
                     //删除本地存储的token
                     localStorage.removeItem('token');
                     //因为当前在iframe中  所以跳转到登录页面要在上级跳转
-                    window.parent.location.href = '/login.html'
+                    window.parent.location.href = '../login.html'
                 })
             }
         }

@@ -15,13 +15,13 @@ $.ajaxPrefilter(function (opt) {
     //complete 函数是处理整个请求最后的一些事情  这里是权限认证 和success原理一样
     opt.complete = function (res) {
         //在complete 回调函数中,可以使用res.responseJSON 拿到服务器响应回来的数据
-        if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败!') {
+        if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
             //提示用户没有权限
-            alert('对不起,您的登录已经失效请重新登录')
+            alert('登录过时,请重新登录');
             //3.1 强制清空 token
             localStorage.removeItem('token');
             //3.2 强制跳转到/login.html页面
-            location.href = '/login.html';
+            window.top.location.href = '/login.html';
         }
     }
 });
